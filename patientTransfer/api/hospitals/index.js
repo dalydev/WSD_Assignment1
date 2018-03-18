@@ -1,30 +1,43 @@
 import express from 'express';
-import {hospitals} from './hospitals';
+import stubAPI from './hospitals';
 
 const router = express.Router(); // eslint-disable-line
 
+//get all hospitals
 router.get('/', (req, res) => {
+  const hospitals = stubAPI.getAll();
   res.send({hospitals: hospitals});
 });
 
+// Add a hospital
 router.post('/', (req, res) => {
-        let newHospital = req.body;
-        if (newHospital) {
-          hospitals.push({id: newHospital.id, name: newHospital.name, address: newHospital.address,
-          phone_number: newHospital.phone_number});
-          res.status(201).send({message: 'Hospital Created'});
-      } else {
-            res.status(400).send({message:
-            'Unable to find Hospital in request. No Hospital Found in body'});
+      const newHospital = req.body;
+
+      if (newHospital && stubAPI.add(newHospital.code, newHospital.name,
+        newHospital.address, newHospital.phone_number)){
+        return res.status(201).send({message: 'Hospital Added'});
       }
+      return  res.status(400).send({message:
+             'Unable to find Hospital in request. No Hospital Found in body'});
 });
+
+//get a hospital
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  const hospital = stubAPI.getHospital(id);
+
+    if (hospital) {
+      return res.status(200).send(hospital);
+    }
+    return res.status(404).send({message: 'Unable to find Hospital ${id}'});
+})
 
 // Update a hospital
 router.put('/:id', (req, res) => {
      const key = req.params.id;
      const updateHospital = req.body;
      const index = hospitals.map((hospital)=>{
-return hospital.id;
+return hospital.code;
 }).indexOf(key);
             if (index !== -1) {
                hospitals.splice(index, 1, {id: updateHospital.id, name: updateHospital.name, address: updateHospital.address,

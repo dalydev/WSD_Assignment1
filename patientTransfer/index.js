@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import express from 'express';
 import hospitalsRouter from './api/hospitals';
 import bodyParser from 'body-parser';
-//import departmentsRouter from './api/departments';
 
 dotenv.config();
 
@@ -15,7 +14,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
 app.use('/api/hospitals', hospitalsRouter);
-//app.use('/api/departments', departmentsRouter);
 
 app.use(express.static('public'));
 

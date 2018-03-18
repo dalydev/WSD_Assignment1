@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# batch file to load cmd from local directory
+cmd.bat
